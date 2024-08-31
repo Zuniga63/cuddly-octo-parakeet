@@ -10,6 +10,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -22,6 +23,13 @@ import { RolesModule } from './modules/roles/roles.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: typeOrmConfig,
+    }),
+
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get('MONGO_URL'),
+      }),
     }),
 
     CommonModule,
