@@ -16,6 +16,7 @@ export const JoiValidationSchema = Joi.object({
   DB_PASSWORD: Joi.string().required(),
   DB_NAME: Joi.string().required(),
   DB_SYNCHRONIZE: Joi.boolean().default(false),
+  DB_MIGRATIONS_RUN: Joi.boolean().default(false),
 
   MONGO_URL: Joi.string().required(),
 
