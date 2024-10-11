@@ -48,6 +48,7 @@ export class UsersService {
             CloudinaryPresets.PROFILE_PHOTO,
           );
         } catch (error) {
+          console.log(error);
           this.logger.error('No se pudo cargar la imagen desde la url');
         }
       }
