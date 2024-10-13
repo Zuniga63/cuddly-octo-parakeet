@@ -5,4 +5,5 @@ export interface CloudinaryImage {
   format: string;
   type: string;
   url: string;
+  bytes?: number;
 }

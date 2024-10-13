@@ -5,7 +5,6 @@ import { Role } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class RolesService {
@@ -51,7 +50,7 @@ export class RolesService {
     const role = await this.rolesRepository.findOne({ where: { id: roleId }, relations: ['users'] });
     if (!role) throw new NotFoundException('Role not found');
 
-    role.users.push(user as User);
+    role.users?.push(user);
 
     return this.rolesRepository.save(role);
   }
@@ -60,7 +59,7 @@ export class RolesService {
     const role = await this.rolesRepository.findOne({ where: { id: roleId }, relations: ['users'] });
     if (!role) throw new NotFoundException('Role not found');
 
-    role.users = role.users.filter(user => user.id !== userId);
+    role.users = role.users?.filter(user => user.id !== userId);
 
     return this.rolesRepository.save(role);
   }

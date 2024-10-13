@@ -7,52 +7,63 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Role } from 'src/modules/roles/entities/role.entity';
-import { CloudinaryImage } from 'src/modules/cloudinary/interfaces';
 import { Session } from 'src/modules/auth/entities';
+import { ImageResource } from 'src/modules/image-resources/entities';
 
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('text')
-  username: string;
-
+  // * ----------------------------------------------------------------------------------------------------------------
+  // * RELATIONSHIPS
+  // * ----------------------------------------------------------------------------------------------------------------
   @ManyToOne(() => Role, role => role.users, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'role_id' })
   role: Role;
+
+  @OneToMany(() => Session, session => session.user)
+  sessions?: Session[];
+
+  @OneToOne(() => ImageResource, { nullable: true, cascade: true, onDelete: 'SET NULL', eager: true })
+  @JoinColumn({ name: 'profile_photo_id' })
+  profilePhoto?: ImageResource;
+
+  // * ----------------------------------------------------------------------------------------------------------------
+  // * MAIN COLUMNS
+  // * ----------------------------------------------------------------------------------------------------------------
+  @Column('text')
+  username: string;
 
   @Column('text', { unique: true })
   email: string;
 
   @Column('text', { select: false, nullable: true })
-  password: string;
-
-  @Column('json', { nullable: true, name: 'profile_photo' })
-  profilePhoto?: CloudinaryImage;
+  password?: string | null;
 
   @Column('timestamp', { nullable: true, name: 'email_verified_at' })
-  emailVerifiedAt?: Date;
+  emailVerifiedAt: Date | null;
 
   @Column('boolean', { default: false, name: 'is_super_user' })
-  isSuperUser?: boolean;
+  isSuperUser: boolean;
 
   @Column('boolean', { default: true, name: 'is_active' })
-  isActive?: boolean;
+  isActive: boolean;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
-  createdAt?: Date;
+  createdAt: Date;
 
-  @Column('timestamp', { name: 'updated_at', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-  updatedAt?: Date;
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'updated_at' })
+  updatedAt: Date;
 
-  @OneToMany(() => Session, session => session.user)
-  sessions: Session[];
-
+  // * ----------------------------------------------------------------------------------------------------------------
+  // * HOOKS
+  // * ----------------------------------------------------------------------------------------------------------------
   @BeforeInsert()
   emailToLowerCase() {
     this.email = this.email.toLowerCase();
@@ -61,5 +72,6 @@ export class User {
   @BeforeUpdate()
   emailToLowerCaseOnUpdate() {
     this.email = this.email.toLowerCase();
+    this.updatedAt = new Date();
   }
 }
