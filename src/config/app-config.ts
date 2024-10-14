@@ -28,6 +28,14 @@ export interface EnvironmentVariables {
     clientSecret: string;
     callbackUrl: string;
   };
+  resend: {
+    apiKey: string;
+    from: string;
+  };
+  urls: {
+    backend?: string;
+    frontend?: string;
+  };
 }
 
 export const appConfig = (): EnvironmentVariables => ({
@@ -63,5 +71,13 @@ export const appConfig = (): EnvironmentVariables => ({
     clientId: process.env.GOOGLE_CLIENT_ID || 'clientId',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'client',
     callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'callbackUrl',
+  },
+  resend: {
+    apiKey: process.env.RESEND_API || '',
+    from: process.env.RESEND_FROM || '',
+  },
+  urls: {
+    backend: process.env.BACKEND_URL || 'http://localhost:3000',
+    frontend: process.env.FRONTEND_URL || 'http://localhost:4200',
   },
 });

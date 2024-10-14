@@ -76,6 +76,23 @@ export class AuthController {
   }
 
   // * ----------------------------------------------------------------------------------------------------------------
+  // * VERIFY EMAIL
+  // * ----------------------------------------------------------------------------------------------------------------
+  @Get('verify-email')
+  @ApiOperation({
+    summary: 'Verify Email',
+    description: 'Public end point for verify the email',
+  })
+  @ApiQuery({ name: 'token', required: true })
+  @ApiOkResponse({
+    description: 'The email has been successfully verified.',
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid token.' })
+  async verifyEmail(@Query('token') token: string) {
+    return this.authService.verifyEmail(token);
+  }
+
+  // * ----------------------------------------------------------------------------------------------------------------
   // * GOOGLE OAUTH
   // * ----------------------------------------------------------------------------------------------------------------
 

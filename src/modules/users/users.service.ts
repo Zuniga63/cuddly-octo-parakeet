@@ -162,10 +162,20 @@ export class UsersService {
     const { password, newPassword } = changePasswordDto;
 
     const user = await this.getFullUser(email);
-    if (!user || !user.password) throw new NotFoundException('User not found');
-    if (!compareSync(password, user.password)) throw new UnauthorizedException('Invalid password');
+    if (!user) throw new NotFoundException('User not found');
+    if (user.password && !compareSync(password, user.password)) throw new UnauthorizedException('Invalid password');
 
     user.password = hashPassword(newPassword);
     await this.usersRepository.save(user);
+  }
+
+  async verifyEmail(userId: string) {
+    const user = await this.findOne(userId);
+    if (!user) throw new NotFoundException('User not found');
+
+    user.emailVerifiedAt = new Date();
+    await this.usersRepository.save(user);
+
+    return new UserDto(user);
   }
 }

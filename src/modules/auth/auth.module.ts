@@ -13,6 +13,7 @@ import { ProfileController } from './profile.controller';
 
 import { AuthService, SessionService } from './services';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { MailsModule } from '../mails/mails.module';
 
 @Module({
   imports: [
@@ -29,6 +30,8 @@ import { GoogleStrategy } from './strategies/google.strategy';
     }),
 
     TypeOrmModule.forFeature([Session]),
+
+    MailsModule,
   ],
   providers: [AuthService, SessionService, LocalStrategy, JwtStrategy, GoogleStrategy],
   controllers: [AuthController, ProfileController],

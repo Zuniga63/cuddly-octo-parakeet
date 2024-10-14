@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { compareSync } from 'bcrypt';
@@ -15,6 +15,7 @@ import { GoogleUserDto } from '../dto/google-user.dto';
 import { OAuth2Client } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from 'src/config';
+import { MailsService } from 'src/modules/mails/mails.service';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly sessionService: SessionService,
     private readonly configService: ConfigService<EnvironmentVariables>,
+    private readonly emailService: MailsService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<User | null> {
@@ -41,6 +43,7 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
+    this.sendEmailVerification(user);
     return new UserDto(user);
   }
 
@@ -76,6 +79,23 @@ export class AuthService {
 
   async changePassword(user: User, changePasswordDto: ChangePasswordDto) {
     return this.usersService.changePassword(user.email, changePasswordDto);
+  }
+
+  async sendEmailVerification(user: User) {
+    const token = this.jwtService.sign({ sub: user.id }, { expiresIn: '5m' });
+    return this.emailService.sendEmailVerification(user.email, token);
+  }
+
+  async verifyEmail(token: string) {
+    try {
+      const payload = this.jwtService.verify(token);
+      await this.usersService.verifyEmail(payload.sub);
+    } catch (error) {
+      if (error.name !== 'TokenExpiredError') throw error;
+      throw new BadRequestException('Token expired');
+    }
+
+    return { ok: true };
   }
 
   private createAccessToken({ user, session_id }: { user: User; session_id: string }) {

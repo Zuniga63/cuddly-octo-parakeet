@@ -59,6 +59,18 @@ export class ProfileController {
     return new UserDto(user);
   }
 
+  @Get('/send-email-verification')
+  @ApiOperation({
+    summary: 'Send email verification',
+    description: 'This end point send the email verification',
+  })
+  @ApiOkResponse({
+    description: 'Email verification sent',
+  })
+  sendEmailVerification(@GetUser() user: User) {
+    return this.authService.sendEmailVerification(user);
+  }
+
   // * ----------------------------------------------------------------------------------------------------------------
   // * UPDATE USER PROFILE PHOTO
   // * ----------------------------------------------------------------------------------------------------------------
