@@ -52,8 +52,8 @@ export class User {
   @Column('boolean', { default: false, name: 'is_super_user' })
   isSuperUser: boolean;
 
-  @Column('boolean', { default: true, name: 'is_active' })
-  isActive: boolean;
+  @Column('boolean', { default: false, name: 'is_admin' })
+  isAdmin: boolean;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
   createdAt: Date;

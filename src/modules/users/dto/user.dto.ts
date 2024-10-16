@@ -21,7 +21,7 @@ export class UserDto {
   isSuperUser: boolean;
 
   @ApiProperty({ example: true })
-  isActive: boolean;
+  isAdmin: boolean;
 
   @ApiProperty({ example: '2024-06-23T05:13:57.328Z' })
   createdAt: string;
@@ -37,7 +37,7 @@ export class UserDto {
     this.profilePhoto = user.profilePhoto?.url;
     this.emailVerifiedAt = user.emailVerifiedAt?.toISOString() || undefined;
     this.isSuperUser = user.isSuperUser;
-    this.isActive = user.isActive;
+    this.isAdmin = user.isAdmin;
     this.createdAt = user.createdAt.toISOString();
     this.updatedAt = user.updatedAt.toISOString();
   }
