@@ -59,6 +59,9 @@ export class ProfileController {
     return new UserDto(user);
   }
 
+  // * ----------------------------------------------------------------------------------------------------------------
+  // * SEND EMAIL VERIFICATION
+  // * ----------------------------------------------------------------------------------------------------------------
   @Get('/send-email-verification')
   @ApiOperation({
     summary: 'Send email verification',

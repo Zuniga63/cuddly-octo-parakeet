@@ -31,4 +31,6 @@ export const JoiValidationSchema = Joi.object({
 
   BACKEND_URL: Joi.string().optional(),
   FRONTEND_URL: Joi.string().optional(),
+
+  OLD_API_KEY: Joi.string().required(),
 });

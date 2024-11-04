@@ -36,6 +36,7 @@ export interface EnvironmentVariables {
     backend?: string;
     frontend?: string;
   };
+  oldApiKey: string;
 }
 
 export const appConfig = (): EnvironmentVariables => ({
@@ -80,4 +81,5 @@ export const appConfig = (): EnvironmentVariables => ({
     backend: process.env.BACKEND_URL || 'http://localhost:3000',
     frontend: process.env.FRONTEND_URL || 'http://localhost:4200',
   },
+  oldApiKey: process.env.OLD_API_KEY || '',
 });

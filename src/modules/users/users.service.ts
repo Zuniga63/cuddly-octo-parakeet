@@ -51,8 +51,6 @@ export class UsersService {
     if (!user.emailVerifiedAt) user.emailVerifiedAt = new Date();
     await this.usersRepository.save(user);
 
-    console.log('User:', user);
-
     if (user.profilePhoto || !picture) return user;
 
     // * Add google profile photo to the user

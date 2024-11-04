@@ -21,14 +21,7 @@ export class MailsService {
   ) {}
 
   async sendEmailVerification(email: string, token: string) {
-    const frontendUrl = this.configService.get('urls.frontend', { infer: true });
-    const backendUrl = this.configService.get('urls.backend', { infer: true });
-
-    let verificationLink = frontendUrl || backendUrl;
-    if (!frontendUrl && !backendUrl) verificationLink = 'http://localhost:3000';
-
-    if (!frontendUrl) verificationLink += '/api/auth/verify-email?token=' + token;
-    else verificationLink += '/auth/verify-email?token=' + token;
+    const verificationLink = this.getBaseUrl() + '/auth/verify-email?token=' + token;
 
     const result = await this.sendEmail({
       to: email,
@@ -56,5 +49,16 @@ export class MailsService {
 
   private generateEmail(template: any) {
     return render(template);
+  }
+
+  private getBaseUrl() {
+    const frontendUrl = this.configService.get('urls.frontend', { infer: true });
+    const backendUrl = this.configService.get('urls.backend', { infer: true });
+
+    let verificationLink = frontendUrl || backendUrl;
+    if (!frontendUrl && !backendUrl) verificationLink = 'http://localhost:3000';
+
+    if (!frontendUrl) return (verificationLink += '/api');
+    return verificationLink;
   }
 }

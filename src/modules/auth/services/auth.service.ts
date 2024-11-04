@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { compareSync } from 'bcrypt';
@@ -30,6 +30,7 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<User | null> {
     const user = await this.usersService.getFullUser(username);
     if (!user || !user.password || !compareSync(pass, user.password)) return null;
+    if (!user.isAdmin) return null;
 
     delete user.password;
     return user;
@@ -38,7 +39,9 @@ export class AuthService {
   async signIn({ user, ip, userAgent }: AuthLoginParams) {
     const session = await this.sessionService.createSession({ user, ip, userAgent });
     const access_token = this.createAccessToken({ user, session_id: session.id });
-    return { user: new UserDto(user), access_token };
+    const old_access_token = this.configService.get('oldApiKey');
+
+    return { user: new UserDto(user), access_token, old_access_token };
   }
 
   async signUp(createUserDto: CreateUserDto) {
@@ -66,6 +69,7 @@ export class AuthService {
     googleUser.loadFromGooglePayload(payload);
 
     const user = await this.usersService.createFromGoogle(googleUser);
+    if (!user.isAdmin) throw new UnauthorizedException('User is not an admin');
     return this.signIn({ user, ip, userAgent });
   }
 
