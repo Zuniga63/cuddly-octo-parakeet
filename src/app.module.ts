@@ -12,7 +12,7 @@ import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { ImageResourcesModule } from './modules/image-resources/image-resources.module';
 import { MailsModule } from './modules/mails/mails.module';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -27,10 +27,10 @@ import { MongooseModule } from '@nestjs/mongoose';
       useFactory: typeOrmConfig,
     }),
 
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({ uri: configService.get<string>('mongo')! }),
-    }),
+    // MongooseModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => ({ uri: configService.get<string>('mongo')! }),
+    // }),
 
     CommonModule,
 
