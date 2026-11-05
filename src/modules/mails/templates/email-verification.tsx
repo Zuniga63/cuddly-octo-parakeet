@@ -54,13 +54,13 @@ EmailVerification.PreviewProps = {
 
 export default EmailVerification;
 
-const main = {
+const main: React.CSSProperties = {
   backgroundColor: '#f9fafb',
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
 };
 
-const container = {
+const container: React.CSSProperties = {
   margin: '0 auto',
   padding: '20px 25px 48px',
   maxWidth: '600px',
@@ -69,7 +69,7 @@ const container = {
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
 };
 
-const heading = {
+const heading: React.CSSProperties = {
   fontSize: '28px',
   fontWeight: 'bold',
   marginTop: '48px',
@@ -77,28 +77,28 @@ const heading = {
   color: '#333333',
 };
 
-const body = {
+const body: React.CSSProperties = {
   margin: '24px 0',
 };
 
-const paragraph = {
+const paragraph: React.CSSProperties = {
   fontSize: '16px',
   lineHeight: '26px',
   color: '#4a4a4a',
 };
 
-const link = {
+const link: React.CSSProperties = {
   color: '#FF6363',
   textDecoration: 'none',
   fontWeight: 'bold',
 };
 
-const hr = {
+const hr: React.CSSProperties = {
   borderColor: '#dddddd',
   marginTop: '48px',
 };
 
-const footer = {
+const footer: React.CSSProperties = {
   color: '#8898aa',
   fontSize: '12px',
   marginTop: '20px',
